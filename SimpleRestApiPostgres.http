@@ -1,0 +1,6 @@
+@SimpleRestApiPostgres_HostAddress = http://localhost:5037
+
+GET {{SimpleRestApiPostgres_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
