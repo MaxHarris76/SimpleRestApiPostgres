@@ -48,7 +48,7 @@ namespace SimpleRestApiPostgres.Controllers
 
         // GET: api/ToDoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ToDoItem>> GetToDoItemByIdAsync(long id)
+        public async Task<ActionResult<ToDoItem?>?> GetToDoItemByIdAsync(long id)
         {
             return await toDoItemsService.GetToDoItemByIdAsync(id);
         }
@@ -78,14 +78,14 @@ namespace SimpleRestApiPostgres.Controllers
         [HttpPost]
         public async Task<ActionResult<ToDoItem>> AddToDoItemAsync(ToDoItem toDoItem)
         {
-            bool result = await toDoItemsService.AddToDoItemAsync(toDoItem);
+            ToDoItem? result = await toDoItemsService.AddToDoItemAsync(toDoItem);
 
-            if (!result)
+            if (result == null)
             {
                 return BadRequest();
             }
 
-            return CreatedAtAction(nameof(GetToDoItemByIdAsync), new { id = toDoItem.Id }, toDoItem);
+            return CreatedAtAction(nameof(GetToDoItemByIdAsync), new { id = result.Id }, result);
         }
 
         // DELETE: api/ToDoItems/5

@@ -34,9 +34,15 @@ namespace SimpleRestApiPostgres.Services.ToDoItems
             return await appDbContext.ToDoItem.ToListAsync();
         }
 
-        public async Task<ActionResult<ToDoItem>> GetToDoItemByIdAsync(long id)
+        public async Task<ActionResult<ToDoItem?>?> GetToDoItemByIdAsync(long id)
         {
-            return await appDbContext.ToDoItem.FindAsync(id);       
+            ToDoItem? toDoItem = await appDbContext.ToDoItem.FindAsync(id);
+
+            if(toDoItem == null)
+            {
+                return null;
+            }
+            return toDoItem;
         }
 
         public async Task<bool> PutToDoItemAsync(long id, ToDoItem toDoItem)
@@ -55,18 +61,18 @@ namespace SimpleRestApiPostgres.Services.ToDoItems
             }
         }
 
-        public async Task<bool> AddToDoItemAsync(ToDoItem item)
+        public async Task<ToDoItem?> AddToDoItemAsync(ToDoItem item)
         {
             appDbContext.ToDoItem.Add(item);
 
             try
             {
                 await appDbContext.SaveChangesAsync();
-                return true;
+                return item;
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 
